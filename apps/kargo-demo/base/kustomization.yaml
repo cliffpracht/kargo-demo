@@ -5,6 +5,10 @@ resources:
 - deploy.yaml
 - service.yaml
 
+helmGlobals:
+  chartHome: ./charts
+
 helmCharts:
-  - name: datadog-operator
-    version: 2.17.0
+- name: my-local-chart       # Directory name within chartHome
+  releaseName: my-release
+  namespace: my-namespace
