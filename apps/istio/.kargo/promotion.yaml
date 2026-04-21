@@ -1,0 +1,35 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: PromotionTask
+metadata:
+  name: promote
+  namespace: istio
+spec:
+  steps:
+  - config:
+      checkout:
+      - branch: main
+        path: ./src
+      - branch: stages/${{ ctx.stage }}
+        create: true
+        path: ./out
+      repoURL: ${{ vars.gitopsRepo }}
+    uses: git-clone
+  - config:
+      outPath: ./out
+      path: ./src/apps/istio/destinations/${{ ctx.stage }}
+    uses: kustomize-build
+  - config:
+      path: ./out
+    uses: git-clear
+  - as: commit
+    config:
+      message: heelo from kargo
+      path: ./out
+    uses: git-commit
+  - config:
+      path: ./out
+    uses: git-push
+
+  vars:
+  - name: gitopsRepo
+    value: https://github.com/cliffpracht/kargo-demo

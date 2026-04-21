@@ -1,0 +1,16 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: istio
+  namespace: istio
+spec:
+  freightCreationPolicy: Automatic
+  interval: 5m0s
+  subscriptions:
+    - git:
+        repoURL: https://github.com/cliffpracht/kargo-demo
+        commitSelectionStrategy: NewestFromBranch
+        includePaths:
+          - apps/istio
+        excludePaths:
+          - apps/istio/.kargo
